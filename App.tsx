@@ -1,8 +1,10 @@
 import * as React from 'react';
-import {View, Text, Button, SafeAreaView} from 'react-native';
+import {View, Text, Button, SafeAreaView, StatusBar} from 'react-native';
 import {NavigationContainer, RouteProp} from '@react-navigation/native';
 import {createNativeStackNavigator, NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {navigationArray} from './src/components/Navigation/navigation-values';
+import {Navigation} from './src/components/Navigation/Navigation';
 
 /*
 export default function App() {
@@ -19,7 +21,9 @@ export default function App() {
 
 export type RootStackParamList = {
     Home: undefined;
-    Details: { itemId: number; otherParam?: string }; // Specify the types of parameters expected
+    Details: { itemId: number; otherParam?: string };
+    Registration: undefined
+    Auth: undefined
 };
 
 // Define navigation prop type for HomeScreen
@@ -34,6 +38,11 @@ type DetailsScreenNavigationProp = NativeStackNavigationProp<
     'Details'
 >;
 
+type EntryScreenNavigationProp = NativeStackNavigationProp<
+    RootStackParamList,
+    'Registration'
+>;
+
 // Define route prop type for DetailsScreen
 type DetailsScreenRouteProp = RouteProp<RootStackParamList, 'Details'>;
 
@@ -42,12 +51,16 @@ type HomeScreenProps = {
     navigation: HomeScreenNavigationProp;
 };
 
+export type EntryScreenProps = {
+    navigation: EntryScreenNavigationProp;
+};
+
 // Props for DetailsScreen
 type DetailsScreenProps = {
     route?: DetailsScreenRouteProp;
     navigation?: DetailsScreenNavigationProp;
 };
-function HomeScreen({ navigation }: HomeScreenProps) {
+export function HomeScreen({ navigation }: HomeScreenProps) {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Home Screen</Text>
@@ -65,7 +78,7 @@ function HomeScreen({ navigation }: HomeScreenProps) {
   );
 }
 
-function DetailsScreen({
+export function DetailsScreen({
   route,
   navigation,
 }: DetailsScreenProps) {
@@ -84,24 +97,20 @@ function DetailsScreen({
         }
       />
       <Button title="Go to Home" onPress={() => navigation?.navigate('Home')} />
+      <Button title="Go to Entry" onPress={() => navigation?.navigate('Registration')} />
       <Button title="Go back" onPress={() => navigation?.goBack()} />
     </View>
   );
 }
 
-const Stack = createNativeStackNavigator();
 
 
 function App() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1 }}>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home">
-            <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
-            <Stack.Screen name="Details" component={DetailsScreen} options={{ headerShown: false }}/>
-          </Stack.Navigator>
-        </NavigationContainer>
+        <StatusBar barStyle="default" />
+        <Navigation/>
       </SafeAreaView>
     </SafeAreaProvider>
   );
